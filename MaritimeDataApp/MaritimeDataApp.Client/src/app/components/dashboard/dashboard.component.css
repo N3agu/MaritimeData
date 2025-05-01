@@ -1,0 +1,10 @@
+:host ::ng-deep .ngx-charts text {
+  fill: #333; /* Or your desired text color */
+}
+
+/* You might need to adjust chart container styles depending on layout */
+.chart-container {
+  width: 100%;
+  height: 400px; /* Or adjust as needed */
+  display: block; /* Ensure it takes block space */
+}

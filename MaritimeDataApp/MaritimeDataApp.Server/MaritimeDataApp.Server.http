@@ -1,0 +1,6 @@
+@MaritimeDataApp.Server_HostAddress = http://localhost:5150
+
+GET {{MaritimeDataApp.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

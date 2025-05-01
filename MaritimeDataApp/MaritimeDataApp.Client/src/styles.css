@@ -1,0 +1,10 @@
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif; /* Ensure font is applied */
+  background-color: #f7fafc; /* Equivalent to Tailwind bg-gray-100 */
+}
+
+/* Styling for ngx-charts text */
+.ngx-charts text {
+  fill: #333; /* Darker text for better readability */
+}

@@ -1,0 +1,52 @@
+<div class="p-4 md:p-6 lg:p-8">
+  <h2 class="text-2xl font-semibold text-gray-800 mb-4">Ships</h2>
+
+  <div *ngIf="isLoading" class="text-center py-10">
+    <p class="text-gray-500">Loading ships...</p>
+  </div>
+
+  <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+    <strong class="font-bold">Error:</strong>
+    <span class="block sm:inline"> {{ error }}</span>
+  </div>
+
+  <div *ngIf="(ships$ | async) as ships; else noData" class="overflow-x-auto bg-white rounded-lg shadow">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            ID
+          </th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            Name
+          </th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            Max Speed (knots)
+          </th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <tr *ngFor="let ship of ships" class="hover:bg-gray-50">
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+            {{ ship.id }}
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+            {{ ship.name }}
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+            {{ ship.maxSpeed }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="ships.length === 0 && !isLoading" class="text-center py-6 text-gray-500">
+      No ships found.
+    </div>
+  </div>
+
+  <ng-template #noData>
+    <div *ngIf="!isLoading && !error" class="text-center py-6 text-gray-500">
+      No ship data available.
+    </div>
+  </ng-template>
+</div>

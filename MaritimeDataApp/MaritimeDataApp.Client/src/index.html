@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Maritime Data App</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Optional: Configure Tailwind defaults if needed
+    // tailwind.config = {
+    //   theme: {
+    //     extend: {
+    //       colors: {
+    //         primary: '#3490dc', // Example custom color
+    //       }
+    //     }
+    //   }
+    // }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    /* Fix for ngx-charts tooltips with Tailwind */
+    .ngx-charts-tooltip-area {
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+  <app-root></app-root>
+</body>
+</html>
