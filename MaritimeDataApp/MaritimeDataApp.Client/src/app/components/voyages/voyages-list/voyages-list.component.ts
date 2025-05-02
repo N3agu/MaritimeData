@@ -2,14 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Voyage } from '../../../models/maritime.models';
 import { VoyageService } from '../../../services/voyage.service';
-import { CommonModule, DatePipe } from '@angular/common'; // Import DatePipe
+import { CommonModule, DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-voyages-list',
   standalone: true,
-  imports: [CommonModule, DatePipe], // Add DatePipe here
+  imports: [CommonModule, DatePipe],
   templateUrl: './voyages-list.component.html',
-  styleUrls: ['./voyages-list.component.css'],
   providers: [DatePipe] // Provide DatePipe
 })
 export class VoyagesListComponent implements OnInit {

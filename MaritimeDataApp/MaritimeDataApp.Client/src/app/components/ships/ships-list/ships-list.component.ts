@@ -2,14 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Ship } from '../../../models/maritime.models';
 import { ShipService } from '../../../services/ship.service';
-import { CommonModule } from '@angular/common'; // Import CommonModule
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-ships-list',
   standalone: true, // Make component standalone
-  imports: [CommonModule], // Import CommonModule for ngFor, async pipe
-  templateUrl: './ships-list.component.html',
-  styleUrls: ['./ships-list.component.css']
+  imports: [CommonModule], // CommonModule for ngFor, async pipe
+  templateUrl: './ships-list.component.html'
 })
 export class ShipsListComponent implements OnInit {
   ships$: Observable<Ship[]> | undefined; // Observable stream of ships
@@ -27,7 +26,7 @@ export class ShipsListComponent implements OnInit {
     this.error = null;
     this.ships$ = this.shipService.getShips();
 
-    // Handle loading and error states (optional but good practice)
+    // Handle loading and error states
     this.ships$.subscribe({
       next: () => this.isLoading = false,
       error: (err) => {

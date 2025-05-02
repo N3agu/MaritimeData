@@ -8,9 +8,6 @@
     <BuildOutputFolder>$(MSBuildProjectDirectory)\dist\maritimedataapp.client\browser\</BuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="src\app\components\about\about.component.css" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="src\assets\" />
   </ItemGroup>
 </Project>

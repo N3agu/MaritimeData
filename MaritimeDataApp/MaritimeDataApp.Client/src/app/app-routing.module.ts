@@ -6,7 +6,8 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ShipsListComponent } from './components/ships/ships-list/ships-list.component';
 import { PortsListComponent } from './components/ports/ports-list/ports-list.component';
 import { VoyagesListComponent } from './components/voyages/voyages-list/voyages-list.component';
-import { NotFoundComponent } from './components/404/not-found.component'
+import { NotFoundComponent } from './components/404/not-found.component';
+import { AboutComponent } from './components/about/about.component';
 
 export const routes: Routes = [
   // Default route redirects to dashboard
@@ -19,6 +20,8 @@ export const routes: Routes = [
   { path: 'ports', component: PortsListComponent, title: 'Maritime Data | Ports' },
   // Route for listing voyages
   { path: 'voyages', component: VoyagesListComponent, title: 'Maritime Data | Voyages' },
+  // Route for about
+  { path: 'about', component: AboutComponent },
   // Route for 404
   { path: '**', component: NotFoundComponent }
 ];

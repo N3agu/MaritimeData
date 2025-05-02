@@ -8,8 +8,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-ports-list',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './ports-list.component.html',
-  styleUrls: ['./ports-list.component.css']
+  templateUrl: './ports-list.component.html'
 })
 export class PortsListComponent implements OnInit {
   ports$: Observable<Port[]> | undefined;

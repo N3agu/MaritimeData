@@ -26,7 +26,7 @@
                                    [xAxisLabel]="xAxisLabel"
                                    [yAxisLabel]="yAxisLabel"
                                    [scheme]="colorScheme"
-                                   [yAxisTicks]="yAxisTicks?.length ? yAxisTicks : []" (select)="onSelect($event)">
+                                   [yAxisTicks]="yAxisTicks.length ? yAxisTicks : []" (select)="onSelect($event)">
           </ngx-charts-bar-vertical>
         </div>
         <ng-template #noChartData>
