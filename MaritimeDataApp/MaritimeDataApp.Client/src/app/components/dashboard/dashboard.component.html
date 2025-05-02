@@ -52,7 +52,7 @@
       <div *ngIf="!isLoadingCountries && !countriesError" class="flex-grow overflow-y-auto">
         <ng-container *ngIf="(visitedCountries$ | async) as countries">
           <ul *ngIf="countries.length > 0; else noCountriesFound"
-              class="list-disc list-outside space-y-1 text-gray-600 mt-2 pl-5">
+              class="space-y-1 text-gray-600 mt-2 pl-5">
             <li *ngFor="let country of countries">{{ country }}</li>
           </ul>
           <ng-template #noCountriesFound>

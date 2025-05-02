@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'; // *** Import OnDestroy ***
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 import { ShipService } from '../../services/ship.service';
@@ -6,8 +6,8 @@ import { CountryVisitService } from '../../services/country-visit.service';
 import { PortService } from '../../services/port.service';
 import { VoyageService } from '../../services/voyage.service';
 import { Ship, ChartData, Port, Voyage } from '../../models/maritime.models';
-import { Observable, of, Subject } from 'rxjs'; // *** Import of, Subject ***
-import { map, catchError, tap, takeUntil } from 'rxjs/operators'; // *** Import takeUntil ***
+import { Observable, of, Subject } from 'rxjs';
+import { map, catchError, tap, takeUntil } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -17,14 +17,12 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit, OnDestroy { // *** Implement OnDestroy ***
-  // --- Chart Data Observables (Used by async pipe in template) ---
+export class DashboardComponent implements OnInit, OnDestroy {
   shipSpeedData$: Observable<ChartData[]> | undefined;
   visitedCountries$: Observable<string[]> | undefined;
   portsByCountryData$: Observable<ChartData[]> | undefined;
   voyagesByMonthData$: Observable<ChartData[]> | undefined;
 
-  // --- Config remains the same ---
   shipSpeedColorScheme = { name: 'shipSpeedScheme', selectable: true, group: ScaleType.Ordinal, domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA'] };
   shipSpeedShowXAxisLabel: boolean = true; shipSpeedXAxisLabel: string = 'Speed Range (knots)'; shipSpeedShowYAxisLabel: boolean = true; shipSpeedYAxisLabel: string = 'Number of Ships'; shipSpeedShowLegend: boolean = false;
   portsColorScheme = { name: 'portsScheme', selectable: true, group: ScaleType.Ordinal, domain: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#6366f1', '#8b5cf6'] };
@@ -32,7 +30,6 @@ export class DashboardComponent implements OnInit, OnDestroy { // *** Implement 
   voyagesColorScheme = { name: 'voyagesScheme', selectable: true, group: ScaleType.Ordinal, domain: ['#0ea5e9', '#f97316', '#84cc16', '#14b8a6', '#d946ef', '#f43f5e'] };
   voyagesShowXAxisLabel: boolean = true; voyagesXAxisLabel: string = 'Month (YYYY-MM)'; voyagesShowYAxisLabel: boolean = true; voyagesYAxisLabel: string = 'Number of Voyages Started'; voyagesShowLegend: boolean = false;
 
-  // --- Loading & Error States ---
   isLoadingShipSpeedChart = true;
   isLoadingCountries = true;
   isLoadingPortsChart = true;
@@ -43,11 +40,10 @@ export class DashboardComponent implements OnInit, OnDestroy { // *** Implement 
   portsChartError: string | null = null;
   voyagesChartError: string | null = null;
 
-  // --- Subject for unsubscribing ---
   private destroy$ = new Subject<void>();
 
   constructor(
-    private http: HttpClient, // Keep if needed elsewhere, otherwise remove
+    private http: HttpClient,
     private shipService: ShipService,
     private countryVisitService: CountryVisitService,
     private portService: PortService,
@@ -66,27 +62,21 @@ export class DashboardComponent implements OnInit, OnDestroy { // *** Implement 
     this.destroy$.complete();
   }
 
-  // --- Data Loading Methods ---
-
   loadVisitedCountries(): void {
     this.isLoadingCountries = true;
     this.countriesError = null;
-    // Assign to observable for async pipe
     this.visitedCountries$ = this.countryVisitService.getCountriesVisitedLastYear().pipe(
       catchError(err => {
         console.error('Error loading visited countries:', err);
         this.countriesError = 'Failed to load visited countries.';
-        // Return empty array so async pipe doesn't break
         return of([]);
       }),
-      // Use finalize or similar if needed, but managing flags in subscribe is clearer here
-      takeUntil(this.destroy$) // Unsubscribe on component destroy
+      takeUntil(this.destroy$)
     );
-    // Subscribe separately to manage loading/error flags
+
     this.visitedCountries$.subscribe({
-      next: () => { this.isLoadingCountries = false; }, // Set loading false on success
-      error: () => { this.isLoadingCountries = false; } // Also set false on error (already handled in catchError, but safe)
-      // No complete needed as takeUntil handles it
+      next: () => { this.isLoadingCountries = false; },
+      error: () => { this.isLoadingCountries = false; }
     });
   }
 
@@ -94,15 +84,15 @@ export class DashboardComponent implements OnInit, OnDestroy { // *** Implement 
     this.isLoadingShipSpeedChart = true;
     this.shipSpeedChartError = null;
     this.shipSpeedData$ = this.shipService.getShips().pipe(
-      map(ships => this.groupShipsBySpeed(ships)), // Transform first
+      map(ships => this.groupShipsBySpeed(ships)),
       catchError(err => {
         console.error('Error loading/processing ship speed data:', err);
         this.shipSpeedChartError = 'Failed to load ship speed data.';
-        return of([]); // Return empty on error
+        return of([]);
       }),
       takeUntil(this.destroy$)
     );
-    // Subscribe separately for flags
+
     this.shipSpeedData$.subscribe({
       next: () => { this.isLoadingShipSpeedChart = false; },
       error: () => { this.isLoadingShipSpeedChart = false; }
@@ -113,15 +103,15 @@ export class DashboardComponent implements OnInit, OnDestroy { // *** Implement 
     this.isLoadingPortsChart = true;
     this.portsChartError = null;
     this.portsByCountryData$ = this.portService.getPorts().pipe(
-      map(ports => this.groupPortsByCountry(ports)), // Transform first
+      map(ports => this.groupPortsByCountry(ports)),
       catchError(err => {
         console.error('Error loading/processing ports by country data:', err);
         this.portsChartError = 'Failed to load ports by country data.';
-        return of([]); // Return empty on error
+        return of([]);
       }),
       takeUntil(this.destroy$)
     );
-    // Subscribe separately for flags
+
     this.portsByCountryData$.subscribe({
       next: () => { this.isLoadingPortsChart = false; },
       error: () => { this.isLoadingPortsChart = false; }
@@ -132,24 +122,20 @@ export class DashboardComponent implements OnInit, OnDestroy { // *** Implement 
     this.isLoadingVoyagesChart = true;
     this.voyagesChartError = null;
     this.voyagesByMonthData$ = this.voyageService.getVoyages().pipe(
-      map(voyages => this.groupVoyagesByMonth(voyages)), // Transform first
+      map(voyages => this.groupVoyagesByMonth(voyages)),
       catchError(err => {
         console.error('Error loading/processing voyages by month data:', err);
         this.voyagesChartError = 'Failed to load voyages by month data.';
-        return of([]); // Return empty on error
+        return of([]);
       }),
       takeUntil(this.destroy$)
     );
-    // Subscribe separately for flags
+
     this.voyagesByMonthData$.subscribe({
       next: () => { this.isLoadingVoyagesChart = false; },
       error: () => { this.isLoadingVoyagesChart = false; }
     });
   }
-
-
-  // --- Data Transformation Helpers ---
-  // (groupShipsBySpeed, groupPortsByCountry, groupVoyagesByMonth remain the same)
 
   private groupShipsBySpeed(ships: Ship[]): ChartData[] {
     const speedGroups: { [key: string]: number } = {
@@ -170,7 +156,7 @@ export class DashboardComponent implements OnInit, OnDestroy { // *** Implement 
     });
     return Object.entries(countryCounts)
       .map(([name, value]) => ({ name, value }))
-      .sort((a, b) => b.value - a.value); // Sort descending by count
+      .sort((a, b) => b.value - a.value);
   }
 
   private groupVoyagesByMonth(voyages: Voyage[]): ChartData[] {
@@ -190,7 +176,6 @@ export class DashboardComponent implements OnInit, OnDestroy { // *** Implement 
       .map(([name, value]) => ({ name, value }))
       .sort((a, b) => a.name.localeCompare(b.name));
   }
-
 
   onSelect(event: any): void {
     console.log('Chart item selected:', event);
