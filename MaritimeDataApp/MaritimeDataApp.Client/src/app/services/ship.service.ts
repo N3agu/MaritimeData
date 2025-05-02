@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs'; // 'of' creates an Observable from mock data
-import { delay } from 'rxjs/operators'; // To simulate network latency
+import { Observable, of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { Ship } from '../models/maritime.models';
-import { HttpClient } from '@angular/common/http'; // Import HttpClient
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
-  providedIn: 'root' // Service available application-wide
+  providedIn: 'root'
 })
 export class ShipService {
-  // Replace with your actual backend API URL
   private apiUrl = '/api/ships'; // Example URL, adjust as needed
 
   // Mock data - Replace with actual API calls
@@ -26,11 +25,9 @@ export class ShipService {
 
   getShips(): Observable<Ship[]> {
     console.log('ShipService: Fetching ships...');
-    // --- MOCK IMPLEMENTATION ---
     // Simulate an API call with a delay
     return of(this.mockShips).pipe(delay(500));
 
-    // --- REAL HTTP IMPLEMENTATION (Example) ---
     // return this.http.get<Ship[]>(this.apiUrl);
   }
 
@@ -42,5 +39,4 @@ export class ShipService {
   // createShip(ship: Ship): Observable<Ship> {
   //   return this.http.post<Ship>(this.apiUrl, ship);
   // }
-  // ... etc.
 }

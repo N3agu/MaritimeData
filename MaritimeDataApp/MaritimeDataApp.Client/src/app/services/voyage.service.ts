@@ -3,7 +3,7 @@ import { Observable, of, forkJoin } from 'rxjs';
 import { delay, map, switchMap } from 'rxjs/operators';
 import { Voyage } from '../models/maritime.models';
 import { HttpClient } from '@angular/common/http';
-import { PortService } from './port.service'; // Inject PortService to resolve names
+import { PortService } from './port.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +22,6 @@ export class VoyageService {
 
   getVoyages(): Observable<Voyage[]> {
     console.log('VoyageService: Fetching voyages...');
-    // --- MOCK IMPLEMENTATION ---
     // Simulate fetching basic voyage data
     return of(this.mockVoyages).pipe(
       delay(600),
@@ -36,7 +35,7 @@ export class VoyageService {
           }).pipe(
             map(portNames => ({
               ...voyage, // Spread the original voyage data
-              departurePortName: portNames.departure ?? 'Unknown', // Assign resolved names
+              departurePortName: portNames.departure ?? 'Unknown',
               arrivalPortName: portNames.arrival ?? 'Unknown'
             }))
           )
@@ -46,9 +45,6 @@ export class VoyageService {
       })
     );
 
-    // --- REAL HTTP IMPLEMENTATION (Example) ---
-    // This assumes your API returns voyages with port names included,
-    // or you make separate calls as shown in the mock logic.
     // return this.http.get<Voyage[]>(this.apiUrl);
   }
 }

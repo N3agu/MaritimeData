@@ -22,15 +22,11 @@ export class PortService {
 
   getPorts(): Observable<Port[]> {
     console.log('PortService: Fetching ports...');
-    // --- MOCK IMPLEMENTATION ---
     return of(this.mockPorts).pipe(delay(400));
 
-    // --- REAL HTTP IMPLEMENTATION (Example) ---
     // return this.http.get<Port[]>(this.apiUrl);
   }
 
-  // Helper to get port name by ID (useful for Voyages list)
-  // In a real app, you might fetch this differently or have it included in Voyage data
   getPortNameById(id: number): Observable<string | undefined> {
     const port = this.mockPorts.find(p => p.id === id);
     return of(port?.name).pipe(delay(50)); // Simulate quick lookup
