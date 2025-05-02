@@ -17,7 +17,6 @@ namespace MaritimeDataApp.Server.Controllers
         }
 
         // GET: api/ships
-        // Retrieves all ships
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Ship>>> GetShips()
         {
@@ -26,7 +25,6 @@ namespace MaritimeDataApp.Server.Controllers
         }
 
         // GET: api/ships/5
-        // Retrieves a specific ship by its ID
         [HttpGet("{id}")]
         public async Task<ActionResult<Ship>> GetShip(int id)
         {
@@ -41,7 +39,6 @@ namespace MaritimeDataApp.Server.Controllers
         }
 
         // POST: api/ships
-        // Creates a new ship
         [HttpPost]
         public async Task<ActionResult<Ship>> PostShip(Ship ship)
         {
@@ -59,7 +56,6 @@ namespace MaritimeDataApp.Server.Controllers
         }
 
         // PUT: api/ships/5
-        // Updates an existing ship
         [HttpPut("{id}")]
         public async Task<IActionResult> PutShip(int id, Ship ship)
         {
@@ -96,7 +92,6 @@ namespace MaritimeDataApp.Server.Controllers
         }
 
         // DELETE: api/ships/5
-        // Deletes a ship
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteShip(int id)
         {
