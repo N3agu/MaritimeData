@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators'; // Import tap
+import { catchError, tap } from 'rxjs/operators';
 import { Ship } from '../models/maritime.models';
-import { HttpClient, HttpHeaders } from '@angular/common/http'; // Import HttpHeaders
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'

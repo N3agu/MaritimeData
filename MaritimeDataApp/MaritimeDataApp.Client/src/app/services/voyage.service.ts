@@ -8,7 +8,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   providedIn: 'root'
 })
 export class VoyageService {
-  private apiUrl = 'https://localhost:7187/api/voyages'; // Verify port
+  private apiUrl = 'https://localhost:7187/api/voyages';
   private httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
@@ -42,7 +42,7 @@ export class VoyageService {
 
   updateVoyage(voyage: Voyage): Observable<any> {
     const url = `${this.apiUrl}/${voyage.id}`;
-    // Send necessary data, exclude navigation properties
+
     const updateData = {
       id: voyage.id,
       voyageDate: voyage.voyageDate,

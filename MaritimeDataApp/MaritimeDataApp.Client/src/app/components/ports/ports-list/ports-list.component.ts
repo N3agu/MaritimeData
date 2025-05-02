@@ -1,15 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subject, BehaviorSubject, of } from 'rxjs'; // Import Subject, BehaviorSubject, of
-import { switchMap, takeUntil, startWith, tap, catchError } from 'rxjs/operators'; // Import operators
+import { Observable, Subject, BehaviorSubject, of } from 'rxjs';
+import { switchMap, takeUntil, startWith, tap, catchError } from 'rxjs/operators';
 import { Port } from '../../../models/maritime.models';
 import { PortService } from '../../../services/port.service';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms'; // Import Reactive Forms
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-ports-list',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule], // Add ReactiveFormsModule
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './ports-list.component.html'
 })
 export class PortsListComponent implements OnInit, OnDestroy {
@@ -73,10 +73,9 @@ export class PortsListComponent implements OnInit, OnDestroy {
         .subscribe({
           next: () => {
             console.log(`Port ${id} delete request sent`);
-            // Backend might return error if port is in use, handled by service's handleError
-            this.refreshPorts(); // Refresh list regardless (backend determines success)
+            this.refreshPorts();
           },
-          error: (err) => { // Service's handleError should catch this, but good practice
+          error: (err) => {
             this.error = `Failed to delete port ${id}. It might be in use.`;
             console.error('Delete error:', err);
           }

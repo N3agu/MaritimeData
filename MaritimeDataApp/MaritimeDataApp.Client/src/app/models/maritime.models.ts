@@ -21,7 +21,6 @@ export interface Voyage {
   arrivalPort?: Port;
 }
 
-// Model for Chart Data (example for ngx-charts)
 export interface ChartData {
   name: string;
   value: number;

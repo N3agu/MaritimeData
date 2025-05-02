@@ -1,25 +1,25 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subject, BehaviorSubject, of } from 'rxjs';
 import { switchMap, takeUntil, startWith, tap, catchError } from 'rxjs/operators';
-import { Voyage, Port } from '../../../models/maritime.models'; // Import Port
+import { Voyage, Port } from '../../../models/maritime.models';
 import { VoyageService } from '../../../services/voyage.service';
-import { PortService } from '../../../services/port.service'; // Import PortService
+import { PortService } from '../../../services/port.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-voyages-list',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DatePipe], // Add ReactiveFormsModule
+  imports: [CommonModule, ReactiveFormsModule, DatePipe],
   templateUrl: './voyages-list.component.html',
-  providers: [DatePipe] // Keep DatePipe provider
+  providers: [DatePipe]
 })
 export class VoyagesListComponent implements OnInit, OnDestroy {
   private refreshData$ = new BehaviorSubject<void>(undefined);
   private destroy$ = new Subject<void>();
 
   voyages$: Observable<Voyage[]> | undefined;
-  ports$: Observable<Port[]> | undefined; // Observable for ports dropdown
+  ports$: Observable<Port[]> | undefined;
   isLoading = true;
   error: string | null = null;
 
@@ -30,24 +30,22 @@ export class VoyagesListComponent implements OnInit, OnDestroy {
 
   constructor(
     private voyageService: VoyageService,
-    private portService: PortService, // Inject PortService
+    private portService: PortService,
     private fb: FormBuilder,
-    private datePipe: DatePipe // Inject DatePipe for date formatting
+    private datePipe: DatePipe
   ) {
     this.voyageForm = this.fb.group({
-      // Format dates for input type="date" and type="datetime-local"
       voyageDate: [this.formatDateForInput(new Date()), Validators.required],
       departurePortId: [null, Validators.required],
       arrivalPortId: [null, Validators.required],
       voyageStart: [this.formatDateTimeForInput(new Date()), Validators.required],
       voyageEnd: [this.formatDateTimeForInput(new Date()), Validators.required]
-      // Add custom validator later if needed to ensure end > start
     });
   }
 
   ngOnInit(): void {
     this.loadVoyages();
-    this.loadPortsForDropdown(); // Load ports for the form
+    this.loadPortsForDropdown();
   }
 
   ngOnDestroy(): void {
@@ -55,11 +53,10 @@ export class VoyagesListComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  // Helper to format Date to 'yyyy-MM-dd' for date input
   private formatDateForInput(date: Date): string | null {
     return this.datePipe.transform(date, 'yyyy-MM-dd');
   }
-  // Helper to format Date to 'yyyy-MM-ddTHH:mm' for datetime-local input
+
   private formatDateTimeForInput(date: Date): string | null {
     return this.datePipe.transform(date, 'yyyy-MM-ddTHH:mm');
   }
@@ -81,15 +78,14 @@ export class VoyagesListComponent implements OnInit, OnDestroy {
     );
   }
 
-  // Load ports specifically for the dropdowns in the form
   loadPortsForDropdown(): void {
     this.ports$ = this.portService.getPorts().pipe(
       catchError(err => {
         console.error("Error loading ports for dropdown", err);
-        this.error = (this.error ?? '') + ' Failed to load ports for form.'; // Append error
-        return of([]); // Return empty array on error
+        this.error = (this.error ?? '') + ' Failed to load ports for form.';
+        return of([]);
       }),
-      takeUntil(this.destroy$) // Manage subscription
+      takeUntil(this.destroy$)
     );
   }
 
@@ -118,7 +114,7 @@ export class VoyagesListComponent implements OnInit, OnDestroy {
   addVoyage(): void {
     this.isEditing = false;
     this.editingVoyageId = null;
-    // Reset form with current date/time defaults
+
     this.voyageForm.reset({
       voyageDate: this.formatDateForInput(new Date()),
       departurePortId: null,
@@ -132,13 +128,13 @@ export class VoyagesListComponent implements OnInit, OnDestroy {
   editVoyage(voyage: Voyage): void {
     this.isEditing = true;
     this.editingVoyageId = voyage.id;
-    // Patch form, ensuring dates are formatted correctly for input types
+
     this.voyageForm.patchValue({
-      voyageDate: this.formatDateForInput(new Date(voyage.voyageDate)), // Convert to Date if needed
+      voyageDate: this.formatDateForInput(new Date(voyage.voyageDate)),
       departurePortId: voyage.departurePortId,
       arrivalPortId: voyage.arrivalPortId,
-      voyageStart: this.formatDateTimeForInput(new Date(voyage.voyageStart)), // Convert to Date if needed
-      voyageEnd: this.formatDateTimeForInput(new Date(voyage.voyageEnd)) // Convert to Date if needed
+      voyageStart: this.formatDateTimeForInput(new Date(voyage.voyageStart)),
+      voyageEnd: this.formatDateTimeForInput(new Date(voyage.voyageEnd))
     });
     this.showForm = true;
   }
@@ -147,7 +143,7 @@ export class VoyagesListComponent implements OnInit, OnDestroy {
     this.showForm = false;
     this.isEditing = false;
     this.editingVoyageId = null;
-    this.voyageForm.reset(); // Reset clears the form
+    this.voyageForm.reset();
   }
 
   onSubmit(): void {
@@ -156,16 +152,12 @@ export class VoyagesListComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Convert form values back to appropriate types/formats if needed by backend
     const formValue = this.voyageForm.value;
     const voyageData = {
       ...formValue,
-      // Ensure dates are sent in a format the backend expects (e.g., ISO string)
-      // The form gives strings, potentially convert back to Date or ISO string
       voyageDate: new Date(formValue.voyageDate).toISOString(),
       voyageStart: new Date(formValue.voyageStart).toISOString(),
       voyageEnd: new Date(formValue.voyageEnd).toISOString(),
-      // Ensure port IDs are numbers if they somehow became strings
       departurePortId: Number(formValue.departurePortId),
       arrivalPortId: Number(formValue.arrivalPortId)
     };
@@ -204,7 +196,6 @@ export class VoyagesListComponent implements OnInit, OnDestroy {
     }
   }
 
-  // --- Form Getters ---
   get voyageDate() { return this.voyageForm.get('voyageDate'); }
   get departurePortId() { return this.voyageForm.get('departurePortId'); }
   get arrivalPortId() { return this.voyageForm.get('arrivalPortId'); }

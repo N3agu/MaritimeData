@@ -8,7 +8,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
   providedIn: 'root'
 })
 export class PortService {
-  private apiUrl = 'https://localhost:7187/api/ports'; // Verify port
+  private apiUrl = 'https://localhost:7187/api/ports';
   private httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
