@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { Port } from '../../../models/maritime.models';
 import { PortService } from '../../../services/port.service';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-ports-list',
@@ -15,7 +16,10 @@ export class PortsListComponent implements OnInit {
   isLoading = true;
   error: string | null = null;
 
-  constructor(private portService: PortService) { }
+  constructor(
+    private http: HttpClient,
+    private portService: PortService
+  ) { }
 
   ngOnInit(): void {
     this.loadPorts();

@@ -9,6 +9,7 @@
     }
   },
   "profiles": {
+    // Profile for running with Kestrel using HTTP
     "http": {
       "commandName": "Project",
       "dotnetRunMessages": true,
@@ -16,10 +17,10 @@
       "launchUrl": "swagger",
       "applicationUrl": "http://localhost:5150",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
+    // Profile for running with Kestrel using HTTPS
     "https": {
       "commandName": "Project",
       "dotnetRunMessages": true,
@@ -27,19 +28,17 @@
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:7187;http://localhost:5150",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
+    // Profile for running with IIS Express
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
   }
 }
-

@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class CountryVisitService {
-  private apiUrl = '/api/countryvisits'; // Example URL
+  private apiUrl = 'https://localhost:7187/api/countryvisits';
 
   // Example data
   private mockVisits: CountryVisit[] = [

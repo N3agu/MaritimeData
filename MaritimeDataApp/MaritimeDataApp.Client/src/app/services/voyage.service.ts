@@ -9,7 +9,7 @@ import { PortService } from './port.service';
   providedIn: 'root'
 })
 export class VoyageService {
-  private apiUrl = '/api/voyages'; // Example URL
+  private apiUrl = 'https://localhost:7187/api/voyages';
 
   private mockVoyages: Omit<Voyage, 'departurePortName' | 'arrivalPortName'>[] = [
     { id: 1001, voyageDate: '2025-04-15', departurePortId: 101, arrivalPortId: 103, voyageStart: '2025-04-15T08:00:00Z', voyageEnd: '2025-04-18T16:00:00Z' },

@@ -6,6 +6,7 @@ import { CountryVisitService } from '../../services/country-visit.service';
 import { Ship, ChartData, CountryVisit } from '../../models/maritime.models';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-dashboard',
@@ -44,6 +45,7 @@ export class DashboardComponent implements OnInit {
   countriesError: string | null = null;
 
   constructor(
+    private http : HttpClient,
     private shipService: ShipService,
     private countryVisitService: CountryVisitService
   ) { }

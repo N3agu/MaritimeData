@@ -3,19 +3,23 @@ import { Observable } from 'rxjs';
 import { Ship } from '../../../models/maritime.models';
 import { ShipService } from '../../../services/ship.service';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-ships-list',
-  standalone: true, // Make component standalone
-  imports: [CommonModule], // CommonModule for ngFor, async pipe
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './ships-list.component.html'
 })
 export class ShipsListComponent implements OnInit {
-  ships$: Observable<Ship[]> | undefined; // Observable stream of ships
+  ships$: Observable<Ship[]> | undefined;
   isLoading = true;
   error: string | null = null;
 
-  constructor(private shipService: ShipService) { }
+  constructor(
+    private http: HttpClient,
+    private shipService: ShipService
+  ) { }
 
   ngOnInit(): void {
     this.loadShips();

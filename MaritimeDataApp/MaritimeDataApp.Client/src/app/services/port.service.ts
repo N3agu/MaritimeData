@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class PortService {
-  private apiUrl = '/api/ports'; // Example URL
+  private apiUrl = 'https://localhost:7187/api/ports';
 
   private mockPorts: Port[] = [
     { id: 101, name: 'Port of Rotterdam', country: 'Netherlands' },

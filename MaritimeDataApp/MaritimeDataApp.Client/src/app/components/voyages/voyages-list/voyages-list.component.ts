@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { Voyage } from '../../../models/maritime.models';
 import { VoyageService } from '../../../services/voyage.service';
 import { CommonModule, DatePipe } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-voyages-list',
@@ -16,7 +17,10 @@ export class VoyagesListComponent implements OnInit {
   isLoading = true;
   error: string | null = null;
 
-  constructor(private voyageService: VoyageService) { }
+  constructor(
+    private http: HttpClient,
+    private voyageService: VoyageService
+  ) { }
 
   ngOnInit(): void {
     this.loadVoyages();
