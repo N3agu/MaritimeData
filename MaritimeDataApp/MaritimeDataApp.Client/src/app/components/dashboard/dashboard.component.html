@@ -48,7 +48,7 @@
 
       <div *ngIf="(visitedCountries$ | async) as countries; else noCountriesData">
         <ul *ngIf="countries.length > 0; else noCountriesFound" class="list-disc list-inside space-y-1 text-gray-600">
-          <li *ngFor="let country of countries">{{ country.countryName }}</li>
+          <li *ngFor="let country of countries">{{ country }}</li>
         </ul>
         <ng-template #noCountriesFound>
           <div class="text-center py-6 text-gray-500">No visited countries recorded for the last year.</div>

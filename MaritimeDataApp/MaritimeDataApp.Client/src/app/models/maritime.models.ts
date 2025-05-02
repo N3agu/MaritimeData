@@ -25,8 +25,6 @@ export interface Voyage {
 export interface CountryVisit {
   id: number;
   countryName: string;
-  // Add last visited date if needed/available
-  // lastVisited: string;
 }
 
 // Model for Chart Data (example for ngx-charts)

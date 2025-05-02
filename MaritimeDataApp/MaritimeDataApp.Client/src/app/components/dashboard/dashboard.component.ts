@@ -19,7 +19,7 @@ export class DashboardComponent implements OnInit {
 
   // Chart data observables
   shipSpeedData$: Observable<ChartData[]> | undefined;
-  visitedCountries$: Observable<CountryVisit[]> | undefined;
+  visitedCountries$: Observable<string[]> | undefined;
 
   // Chart configuration
   // view: [number, number] = [700, 400]; // REMOVED fixed view for responsiveness
@@ -79,9 +79,6 @@ export class DashboardComponent implements OnInit {
       map(ships => this.groupShipsBySpeed(ships)),
       map(data => {
         this.isLoadingChart = false;
-        // Optional: Calculate Y-axis ticks based on max value for better scaling
-        // const maxValue = Math.max(...data.map(d => d.value), 0);
-        // this.yAxisTicks = this.calculateTicks(maxValue);
         return data;
       })
     );
@@ -116,17 +113,6 @@ export class DashboardComponent implements OnInit {
     return Object.entries(speedGroups).map(([name, value]) => ({ name, value }));
   }
 
-  // Optional: Helper to calculate Y-axis ticks dynamically
-  // private calculateTicks(maxValue: number): number[] {
-  //   if (maxValue <= 5) return Array.from({ length: maxValue + 1 }, (_, i) => i);
-  //   if (maxValue <= 10) return [0, 2, 4, 6, 8, 10];
-  //   // Add more ranges as needed
-  //   const step = Math.ceil(maxValue / 5);
-  //   return Array.from({ length: 6 }, (_, i) => i * step);
-  // }
-
-
-  // Optional: Event handler for chart clicks
   onSelect(event: any): void {
     console.log('Chart item selected:', event);
   }

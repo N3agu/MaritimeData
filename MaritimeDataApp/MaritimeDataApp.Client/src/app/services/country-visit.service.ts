@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { CountryVisit } from '../models/maritime.models';
 import { HttpClient } from '@angular/common/http';
 
@@ -8,25 +8,20 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class CountryVisitService {
-  private apiUrl = 'https://localhost:7187/api/countryvisits';
-
-  // Example data
-  private mockVisits: CountryVisit[] = [
-    { id: 1, countryName: 'Netherlands' },
-    { id: 2, countryName: 'Germany' },
-    { id: 3, countryName: 'Singapore' },
-    { id: 4, countryName: 'USA' },
-    { id: 5, countryName: 'Romania' },
-  ];
+  private apiUrl = 'https://localhost:7187/api/countryvisits/lastyear';
 
   constructor(private http: HttpClient) { }
 
-  getCountriesVisitedLastYear(): Observable<CountryVisit[]> {
-    console.log('CountryVisitService: Fetching countries visited...');
-    // MOCK IMPLEMENTATION
-    return of(this.mockVisits).pipe(delay(300));
+  getCountriesVisitedLastYear(): Observable<string[]> {
+    console.log('CountryVisitService: Fetching countries visited from API...');
+    return this.http.get<string[]>(this.apiUrl)
+      .pipe(catchError(this.handleError<string[]>('getCountriesVisitedLastYear', [])));
+  }
 
-    // REAL HTTP IMPLEMENTATION
-    // return this.http.get<CountryVisit[]>(this.apiUrl); // Assuming API endpoint provides this specific data
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+      console.error(`${operation} failed: ${error.message}`, error);
+      return of(result as T);
+    };
   }
 }
