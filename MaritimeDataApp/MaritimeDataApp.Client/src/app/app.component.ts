@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-root', // CSS selector for this component
+  selector: 'app-root',
   standalone: true,
   imports: [CommonModule, RouterModule],
-  templateUrl: './app.component.html', // Link to the HTML template
-  styleUrls: ['./app.component.css'] // Link to the CSS styles
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
   title = 'Maritime Data App';
