@@ -50,8 +50,9 @@ namespace MaritimeDataApp.Server.Tests.Controllers
 
                 var actionResult = await controller.GetPorts();
 
-                var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
-                var ports = Assert.IsAssignableFrom<IEnumerable<Port>>(okResult.Value);
+                Assert.NotNull(actionResult);
+                var ports = Assert.IsAssignableFrom<IEnumerable<Port>>(actionResult.Value);
+                Assert.NotNull(ports);
                 Assert.Equal(2, ports.Count());
             }
         }
@@ -84,8 +85,9 @@ namespace MaritimeDataApp.Server.Tests.Controllers
 
                 var actionResult = await controller.GetPort(existingId);
 
-                var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
-                var port = Assert.IsType<Port>(okResult.Value);
+                Assert.NotNull(actionResult);
+                var port = Assert.IsType<Port>(actionResult.Value);
+                Assert.NotNull(port);
                 Assert.Equal(existingId, port.Id);
                 Assert.Equal("Test Port 1", port.Name);
             }
@@ -124,6 +126,11 @@ namespace MaritimeDataApp.Server.Tests.Controllers
                 SeedPorts(context);
                 var controller = new PortsController(context);
                 int portIdToUpdate = 1;
+
+                var existingPort = await context.Ports.FindAsync(portIdToUpdate);
+                Assert.NotNull(existingPort);
+                context.Entry(existingPort).State = EntityState.Detached;
+
                 var portToUpdate = new Port { Id = portIdToUpdate, Name = "Updated Port Name", Country = "Country D" };
 
                 var result = await controller.PutPort(portIdToUpdate, portToUpdate);

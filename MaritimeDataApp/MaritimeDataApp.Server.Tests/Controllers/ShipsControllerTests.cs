@@ -107,12 +107,19 @@ namespace MaritimeDataApp.Server.Tests.Controllers
         [Fact]
         public async Task PutShip_ReturnsNoContentResult_WhenUpdateIsSuccessful()
         {
+            // Arrange
             var options = CreateNewContextOptions();
             using (var context = new MaritimeDbContext(options))
             {
                 AddTestData(context);
                 var controller = new ShipsController(context);
                 int shipIdToUpdate = 1;
+
+                var existingShip = await context.Ships.FindAsync(shipIdToUpdate);
+                Assert.NotNull(existingShip);
+
+                context.Entry(existingShip).State = EntityState.Detached;
+
                 var shipToUpdate = new Ship { Id = shipIdToUpdate, Name = "Updated Ship Name", MaxSpeed = 99 };
 
                 var result = await controller.PutShip(shipIdToUpdate, shipToUpdate);

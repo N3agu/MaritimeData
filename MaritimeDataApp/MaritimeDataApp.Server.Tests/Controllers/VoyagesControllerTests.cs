@@ -45,16 +45,21 @@ namespace MaritimeDataApp.Server.Tests.Controllers
 
                 var actionResult = await controller.GetVoyages();
 
-                var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
-                var voyages = Assert.IsAssignableFrom<IEnumerable<Voyage>>(okResult.Value);
+                Assert.NotNull(actionResult);
+                var voyages = Assert.IsAssignableFrom<IEnumerable<Voyage>>(actionResult.Value);
+                Assert.NotNull(voyages);
                 Assert.Equal(2, voyages.Count());
+                
+                var firstVoyage = voyages.First();
+                Assert.Equal(102, firstVoyage.Id);
+                Assert.NotNull(firstVoyage.DeparturePort);
+                Assert.NotNull(firstVoyage.ArrivalPort);
 
-                Assert.NotNull(voyages.First().DeparturePort);
-                Assert.NotNull(voyages.First().ArrivalPort);
-                Assert.Equal("Port A", voyages.First().DeparturePort.Name);
-                Assert.Equal("Port B", voyages.First().ArrivalPort.Name);
+                Assert.Equal("Port B", firstVoyage.DeparturePort.Name);
+                Assert.Equal("Port A", firstVoyage.ArrivalPort.Name);
             }
         }
+
 
         [Fact]
         public async Task GetVoyage_ReturnsNotFoundResult_WhenVoyageDoesNotExist()
@@ -84,10 +89,11 @@ namespace MaritimeDataApp.Server.Tests.Controllers
 
                 var actionResult = await controller.GetVoyage(existingId);
 
-                var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
-                var voyage = Assert.IsType<Voyage>(okResult.Value);
+                Assert.NotNull(actionResult);
+                var voyage = Assert.IsType<Voyage>(actionResult.Value);
+                Assert.NotNull(voyage);
                 Assert.Equal(existingId, voyage.Id);
-                Assert.NotNull(voyage.DeparturePort); // Check included data
+                Assert.NotNull(voyage.DeparturePort);
                 Assert.Equal(1, voyage.DeparturePortId);
             }
         }
@@ -161,15 +167,19 @@ namespace MaritimeDataApp.Server.Tests.Controllers
                 SeedData(context);
                 var controller = new VoyagesController(context);
                 int voyageIdToUpdate = 101;
-                var originalVoyage = await context.Voyages.FindAsync(voyageIdToUpdate);
+
+                var existingVoyage = await context.Voyages.FindAsync(voyageIdToUpdate);
+                Assert.NotNull(existingVoyage);
+                context.Entry(existingVoyage).State = EntityState.Detached;
+
                 var voyageToUpdate = new Voyage
                 {
                     Id = voyageIdToUpdate,
-                    VoyageDate = originalVoyage.VoyageDate.AddDays(1), // Change date
-                    DeparturePortId = originalVoyage.DeparturePortId,
-                    ArrivalPortId = originalVoyage.ArrivalPortId,
-                    VoyageStart = originalVoyage.VoyageStart,
-                    VoyageEnd = originalVoyage.VoyageEnd
+                    VoyageDate = DateTime.UtcNow.AddDays(1),
+                    DeparturePortId = existingVoyage.DeparturePortId,
+                    ArrivalPortId = existingVoyage.ArrivalPortId,
+                    VoyageStart = existingVoyage.VoyageStart.AddHours(1),
+                    VoyageEnd = existingVoyage.VoyageEnd.AddHours(2)
                 };
 
                 var result = await controller.PutVoyage(voyageIdToUpdate, voyageToUpdate);
@@ -179,6 +189,8 @@ namespace MaritimeDataApp.Server.Tests.Controllers
                 var updatedVoyageInDb = await context.Voyages.FindAsync(voyageIdToUpdate);
                 Assert.NotNull(updatedVoyageInDb);
                 Assert.Equal(voyageToUpdate.VoyageDate, updatedVoyageInDb.VoyageDate);
+                Assert.Equal(voyageToUpdate.VoyageStart, updatedVoyageInDb.VoyageStart);
+                Assert.Equal(voyageToUpdate.VoyageEnd, updatedVoyageInDb.VoyageEnd);
             }
         }
 
