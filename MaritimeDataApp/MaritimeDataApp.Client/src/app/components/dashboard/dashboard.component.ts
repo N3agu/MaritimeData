@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 import { ShipService } from '../../services/ship.service';
 import { CountryVisitService } from '../../services/country-visit.service';
-import { Ship, ChartData, CountryVisit } from '../../models/maritime.models';
+import { Ship, ChartData } from '../../models/maritime.models';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
@@ -16,13 +16,10 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-
-  // Chart data observables
   shipSpeedData$: Observable<ChartData[]> | undefined;
   visitedCountries$: Observable<string[]> | undefined;
 
-  // Chart configuration
-  // view: [number, number] = [700, 400]; // REMOVED fixed view for responsiveness
+  // view: [number, number] = [700, 400]; // fixed view for responsiveness
   gradient: boolean = false;
   showLegend: boolean = true;
   showXAxisLabel: boolean = true;
@@ -35,9 +32,9 @@ export class DashboardComponent implements OnInit {
     group: ScaleType.Ordinal,
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
   };
-  // Added for accessibility and responsiveness
+
   legendTitle: string = 'Legend';
-  yAxisTicks: number[] = []; // Dynamically calculate ticks if needed
+  yAxisTicks: number[] = []; // Dynamically calculate ticks
 
   isLoadingChart = true;
   isLoadingCountries = true;
@@ -92,10 +89,9 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  // Helper function to group ships into speed categories for the chart
   private groupShipsBySpeed(ships: Ship[]): ChartData[] {
     const speedGroups = {
-      '0-15 kn': 0,  // Shortened labels for smaller screens
+      '0-15 kn': 0,
       '16-25 kn': 0,
       '26+ kn': 0,
     };

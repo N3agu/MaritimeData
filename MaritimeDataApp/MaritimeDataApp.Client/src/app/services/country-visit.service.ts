@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { CountryVisit } from '../models/maritime.models';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({

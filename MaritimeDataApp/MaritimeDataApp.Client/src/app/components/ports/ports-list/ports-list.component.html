@@ -1,7 +1,48 @@
 <div class="p-4 md:p-6 lg:p-8">
-  <h2 class="text-2xl font-semibold text-gray-800 mb-4">Ports</h2>
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-semibold text-gray-800">Ports</h2>
+    <button (click)="addPort()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow">
+      Add New Port
+    </button>
+  </div>
 
-  <div *ngIf="isLoading" class="text-center py-10 text-gray-500">Loading ports...</div>
+  <div *ngIf="showForm" class="mb-6 p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-sm">
+    <h3 class="text-lg font-medium mb-3">{{ isEditing ? 'Edit Port' : 'Add New Port' }}</h3>
+    <form [formGroup]="portForm" (ngSubmit)="onSubmit()" novalidate>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label for="portName" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+          <input type="text" id="portName" formControlName="name"
+                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                 [ngClass]="{ 'border-red-500': name?.invalid && (name?.dirty || name?.touched) }">
+          <div *ngIf="name?.invalid && (name?.dirty || name?.touched)" class="text-red-600 text-sm mt-1">
+            <span *ngIf="name?.errors?.['required']">Name is required.</span>
+          </div>
+        </div>
+        <div>
+          <label for="portCountry" class="block text-sm font-medium text-gray-700 mb-1">Country</label>
+          <input type="text" id="portCountry" formControlName="country"
+                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                 [ngClass]="{ 'border-red-500': country?.invalid && (country?.dirty || country?.touched) }">
+          <div *ngIf="country?.invalid && (country?.dirty || country?.touched)" class="text-red-600 text-sm mt-1">
+            <span *ngIf="country?.errors?.['required']">Country is required.</span>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-end space-x-3">
+        <button type="button" (click)="cancelEdit()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
+          Cancel
+        </button>
+        <button type="submit" [disabled]="portForm.invalid"
+                class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50 disabled:cursor-not-allowed">
+          {{ isEditing ? 'Update Port' : 'Save Port' }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="isLoading && !showForm" class="text-center py-10 text-gray-500">Loading ports...</div>
+
   <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">{{ error }}</div>
 
   <div *ngIf="(ports$ | async) as ports; else noData" class="overflow-x-auto bg-white rounded-lg shadow">
@@ -11,6 +52,7 @@
           <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
           <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
           <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Country</th>
+          <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
         </tr>
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
@@ -18,6 +60,14 @@
           <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ port.id }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ port.name }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ port.country }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+            <button (click)="editPort(port)" title="Edit Port" class="text-indigo-600 hover:text-indigo-900">
+              <svg class="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+            </button>
+            <button (click)="deletePort(port.id)" title="Delete Port" class="text-red-600 hover:text-red-900">
+              <svg class="w-5 h-5 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
