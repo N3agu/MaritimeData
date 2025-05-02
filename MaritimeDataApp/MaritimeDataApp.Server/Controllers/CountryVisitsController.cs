@@ -21,20 +21,34 @@ namespace MaritimeDataApp.Server.Controllers
         {
             var oneYearAgo = DateTimeOffset.UtcNow.AddYears(-1);
 
-            var countries = await _context.Voyages
-                .Where(v => v.VoyageEnd >= oneYearAgo) // last year
+            // Query voyages that ended within the last year
+            var voyagesLastYear = await _context.Voyages
+                .Where(v => v.VoyageEnd >= oneYearAgo)
                 .Include(v => v.ArrivalPort)
-                .Select(v => v.ArrivalPort!.Country)
-                .Distinct()
-                .OrderBy(country => country) // alphabetically
+                .Include(v => v.DeparturePort)
                 .ToListAsync();
 
-            if (countries == null || !countries.Any())
+            // get distinct countries from both departure and arrival
+            var arrivalCountries = voyagesLastYear
+                .Where(v => v.ArrivalPort != null)
+                .Select(v => v.ArrivalPort!.Country);
+
+            var departureCountries = voyagesLastYear
+                 .Where(v => v.DeparturePort != null)
+                 .Select(v => v.DeparturePort!.Country);
+
+            var distinctCountries = arrivalCountries
+                .Concat(departureCountries) // combine lists
+                .Where(c => !string.IsNullOrEmpty(c))
+                .Distinct()
+                .OrderBy(country => country);
+
+            if (!distinctCountries.Any())
             {
                 return Ok(new List<string>());
             }
 
-            return Ok(countries);
+            return Ok(distinctCountries.ToList());
         }
     }
 }
